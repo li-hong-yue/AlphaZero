@@ -1,9 +1,10 @@
 from __future__ import print_function
+import numpy as np
 import sys
 sys.path.append('..')
 from algorithms.game import Game
 from .board import Board
-import numpy as np
+
 
 class OthelloGame(Game):
     square_content = {
