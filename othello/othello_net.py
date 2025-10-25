@@ -1,6 +1,4 @@
 import sys
-
-
 import argparse
 import torch
 import torch.nn as nn
@@ -38,7 +36,7 @@ class OthelloNNet(nn.Module):
         self.fc4 = nn.Linear(512, 1)
 
     def forward(self, s):
-        #                                                           s: batch_size x board_x x board_y
+        # s: batch_size x board_x x board_y
         s = s.view(-1, 1, self.board_x, self.board_y)                # batch_size x 1 x board_x x board_y
         s = F.relu(self.bn1(self.conv1(s)))                          # batch_size x num_channels x board_x x board_y
         s = F.relu(self.bn2(self.conv2(s)))                          # batch_size x num_channels x board_x x board_y
