@@ -1,11 +1,12 @@
-from __future__ import print_function
 import numpy as np
 import sys
+
 sys.path.append('..')
+
 from algorithms.game import Game
 from .board import Board
 
-
+ 
 class OthelloGame(Game):
     square_content = {
         -1: "X",
@@ -21,22 +22,20 @@ class OthelloGame(Game):
         self.n = n
 
     def getInitBoard(self):
-        # return initial board (numpy board)
         b = Board(self.n)
         return np.array(b.pieces)
 
     def getBoardSize(self):
-        # (a,b) tuple
         return (self.n, self.n)
 
     def getActionSize(self):
-        # return number of actions
-        return self.n*self.n + 1
+        return self.n * self.n + 1 
+        # last action is do nothing 
 
     def getNextState(self, board, player, action):
-        # if player takes action on board, return next (board,player)
+        # if player takes action on board, return next (board, player)
         # action must be a valid move
-        if action == self.n*self.n:
+        if action == self.n * self.n:
             return (board, -player)
         b = Board(self.n)
         b.pieces = np.copy(board)
@@ -72,11 +71,11 @@ class OthelloGame(Game):
 
     def getCanonicalForm(self, board, player):
         # return state if player==1, else return -state if player==-1
-        return player*board
+        return player * board
 
     def getSymmetries(self, board, pi):
         # mirror, rotational
-        assert(len(pi) == self.n**2+1)  # 1 for pass
+        assert(len(pi) == self.n**2 + 1)  # 1 for pass
         pi_board = np.reshape(pi[:-1], (self.n, self.n))
         l = []
 

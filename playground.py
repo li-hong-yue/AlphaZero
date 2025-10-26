@@ -4,7 +4,7 @@ from algorithms.arena import Arena
 from algorithms.search import MCTS
 from othello.game import OthelloGame
 from othello.players import *
-from othello.model import OthelloModel as GameModel
+from algorithms.model import OthelloModel as GameModel
 
 from utils import dotdict
 
