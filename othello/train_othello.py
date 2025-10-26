@@ -5,8 +5,8 @@ import torch
 from algorithms.coach import Coach
 from algorithms.model import Model
 
-from othello.model import NeuralNet
-from othello.game import OthelloGame as Game
+from .model import NeuralNet
+from .game import OthelloGame as Game
 
 log = logging.getLogger(__name__)
 

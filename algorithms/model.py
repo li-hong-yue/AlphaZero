@@ -1,9 +1,6 @@
 import os
-import sys
-
 import numpy as np
 from tqdm import tqdm
-
 import torch
 import torch.optim as optim
 
