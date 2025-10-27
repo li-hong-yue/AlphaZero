@@ -29,9 +29,6 @@ rp = RandomPlayer(g).play
 gp = GreedyOthelloPlayer(g).play
 hp = HumanOthelloPlayer(g).play
 
-
-
-# nnet players
 n1 = Model(
         NeuralNet(g, args['model']['neuralnet']), 
         g, args['model']
@@ -41,8 +38,8 @@ if mini_othello:
 else:
     assert 0
     n1.load_checkpoint('./pretrained_models/othello/pytorch/','8x8_100checkpoints_best.pth.tar')
-args1 = {'numMCTSSims': 50, 'cpuct':1.0}
-mcts1 = MCTS(g, n1, args1)
+
+mcts1 = MCTS(g, n1, args['self-play'])
 n1p = lambda x: np.argmax(mcts1.getActionProb(x, temp=0))
 
 if human_vs_cpu:
@@ -57,12 +54,10 @@ else:
     else:
         assert 0
         n2.load_checkpoint('./pretrained_models/othello/pytorch/', '8x8_100checkpoints_best.pth.tar')
-    args2 = {'numMCTSSims': 50, 'cpuct': 1.0}
-    mcts2 = MCTS(g, n2, args2)
-    n2p = lambda x: np.argmax(mcts2.getActionProb(x, temp=0))
 
-    player2 = n2p  # Player 2 is neural network if it's cpu vs cpu.
+    mcts2 = MCTS(g, n2, args['self-play'])
+    n2p = lambda x: np.argmax(mcts2.getActionProb(x, temp=0))
+    player2 = n2p  
 
 arena = Arena(n1p, player2, g, display=OthelloGame.display)
-
 print(arena.playGames(2, verbose=True))
