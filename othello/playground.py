@@ -2,19 +2,22 @@ import numpy as np
 
 from algorithms.arena import Arena
 from algorithms.search import MCTS
+from algorithms.model import Model
+
+from othello.model import NeuralNet
 from othello.game import OthelloGame
+from othello.train import args 
 from othello.players import *
-from algorithms.model import OthelloModel as GameModel
-
-from utils import dotdict
 
 """
-use this script to play any two agents against each other, or play manually with
-any agent.
+use this script to play any two agents against each other, 
+or play manually with any agent.
 """
 
-mini_othello = False  # Play in 6x6 instead of the normal 8x8.
-human_vs_cpu = True
+
+
+mini_othello = True  # Play in 6x6 instead of the normal 8x8.
+human_vs_cpu = False
 
 if mini_othello:
     g = OthelloGame(6)
@@ -29,21 +32,32 @@ hp = HumanOthelloPlayer(g).play
 
 
 # nnet players
-n1 = GameModel(g)
+n1 = Model(
+        NeuralNet(g, args['model']['neuralnet']), 
+        g, args['model']
+        )
 if mini_othello:
-    n1.load_checkpoint('./pretrained_models/othello/pytorch/','6x100x25_best.pth.tar')
+    n1.load_checkpoint('temp/','best.pth.tar')
 else:
+    assert 0
     n1.load_checkpoint('./pretrained_models/othello/pytorch/','8x8_100checkpoints_best.pth.tar')
-args1 = dotdict({'numMCTSSims': 50, 'cpuct':1.0})
+args1 = {'numMCTSSims': 50, 'cpuct':1.0}
 mcts1 = MCTS(g, n1, args1)
 n1p = lambda x: np.argmax(mcts1.getActionProb(x, temp=0))
 
 if human_vs_cpu:
     player2 = hp
 else:
-    n2 = GameModel(g)
-    n2.load_checkpoint('./pretrained_models/othello/pytorch/', '8x8_100checkpoints_best.pth.tar')
-    args2 = dotdict({'numMCTSSims': 50, 'cpuct': 1.0})
+    n2 = Model(
+        NeuralNet(g, args['model']['neuralnet']), 
+        g, args['model']
+        )
+    if mini_othello:
+        n2.load_checkpoint('temp/','best.pth.tar')
+    else:
+        assert 0
+        n2.load_checkpoint('./pretrained_models/othello/pytorch/', '8x8_100checkpoints_best.pth.tar')
+    args2 = {'numMCTSSims': 50, 'cpuct': 1.0}
     mcts2 = MCTS(g, n2, args2)
     n2p = lambda x: np.argmax(mcts2.getActionProb(x, temp=0))
 
