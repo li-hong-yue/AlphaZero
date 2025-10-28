@@ -20,13 +20,8 @@ class Arena():
 
     def playGame(self, verbose=False):
         """
-        Executes one episode of a game.
-
-        Returns:
-            either
-                winner: player who won the game (1 if player1, -1 if player2)
-            or
-                draw: result returned from the game that is neither 1, -1, nor 0.
+        Executes one  game.
+        Returns: 1 if player1 won, -1 if player2 won, 0 if draw
         """
         players = {
             1: self.player1, 
@@ -40,7 +35,7 @@ class Arena():
             if hasattr(player, "startGame"):
                 player.startGame()
 
-        while self.game.getGameEnded(board, curPlayer) == 0:
+        while self.game.getGameEnded(board, curPlayer) not in [-1,0,1]:
             it += 1
             if verbose:
                 assert self.display
@@ -71,8 +66,6 @@ class Arena():
             print("Game over: Turn ", str(it), "Result ", str(self.game.getGameEnded(board, 1)))
             self.display(board)
         
-        if self.game.getGameEnded(board, curPlayer) not in [-1, 1]:
-            return 'draw'
         return curPlayer * self.game.getGameEnded(board, curPlayer)
 
     def playGames(self, num=20, verbose=False):

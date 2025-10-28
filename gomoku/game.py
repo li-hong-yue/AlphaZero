@@ -70,8 +70,8 @@ class GomokuGame(Game):
         if self._has_five_in_a_row(board, -1):
             return 1 if player == -1 else -1
         if np.sum(self.getValidMoves(board)) == 0:
-            return 'draw'
-        return 0
+            return 0
+        return 'inplay'
         
 
     def getCanonicalForm(self, board, player):

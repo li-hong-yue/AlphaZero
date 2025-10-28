@@ -17,7 +17,7 @@ or play manually with any agent.
 human_vs_cpu = False
 
 
-g = GomokuGame(16)
+g = GomokuGame(5)
 
 # all players
 rp = RandomPlayer(g).play
@@ -53,4 +53,4 @@ else:
     player2 = n2p  
 '''
 arena = Arena(n1p, player2, g, display=GomokuGame.display)
-print(arena.playGames(50, verbose=False))
+print(arena.playGames(2, verbose=True))
