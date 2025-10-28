@@ -18,7 +18,7 @@ class Arena():
         self.game = game
         self.display = display
 
-    def playGame(self, verbose=False):
+    def playGame(self, verbose=False, flip=False):
         """
         Executes one  game.
         Returns: 1 if player1 won, -1 if player2 won, 0 if draw
@@ -39,7 +39,10 @@ class Arena():
             it += 1
             if verbose:
                 assert self.display
-                print("Turn ", str(it), "Player ", str(curPlayer))
+                if flip:
+                    print("Turn ", str(it), "Player ", str(-curPlayer))
+                else:
+                    print("Turn ", str(it), "Player ", str(curPlayer))
                 self.display(board)
             action = players[curPlayer](self.game.getCanonicalForm(board, curPlayer))
 
@@ -63,7 +66,8 @@ class Arena():
 
         if verbose:
             assert self.display
-            print("Game over: Turn ", str(it), "Result ", str(self.game.getGameEnded(board, 1)))
+            result = self.game.getGameEnded(board, -1) if flip else self.game.getGameEnded(board, 1)
+            print("Game over: Turn ", str(it), "Result ", str(result))
             self.display(board)
         
         return curPlayer * self.game.getGameEnded(board, curPlayer)
@@ -96,7 +100,7 @@ class Arena():
         self.player1, self.player2 = self.player2, self.player1
 
         for _ in tqdm(range(num), desc=f"player 2 starts {num} games"):
-            gameResult = self.playGame(verbose=verbose)
+            gameResult = self.playGame(verbose=verbose, flip=True)
             if gameResult == -1:
                 oneWon += 1
             elif gameResult == 1:
