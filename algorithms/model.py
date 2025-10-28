@@ -2,6 +2,7 @@ import os
 import numpy as np
 from tqdm import tqdm
 import torch
+import torch.nn as nn
 import torch.optim as optim
 
 
@@ -28,6 +29,8 @@ class Model():
         self.board_x, self.board_y = game.getBoardSize()
         self.action_size = game.getActionSize()
         self.args = args
+
+        self.mse_loss = nn.MSELoss()
 
         if self.args['cuda']:
             self.nnet.cuda()
@@ -56,7 +59,7 @@ class Model():
                 boards = torch.tensor(np.array(boards, dtype=np.float32), dtype=torch.float32, device=self.device)
                 target_pis = torch.tensor(pis, dtype=torch.float32, device=self.device)
                 target_vs = torch.tensor(vs, dtype=torch.float32, device=self.device)
-
+     
                 # compute output
                 out_pi, out_v = self.nnet(boards)
                 l_pi = self.loss_pi(target_pis, out_pi)
@@ -73,8 +76,7 @@ class Model():
                 optimizer.step()
 
     def predict(self, board):
-        # predict one board
-        board = torch.tensor(board, dtype=torch.float32, device=self.device).view(1, self.board_x, self.board_y)
+        board = torch.tensor(board, dtype=torch.float32, device=self.device).view(1, self.board_x, self.board_y)   # add batch dim since  predict one board
         self.nnet.eval()
         with torch.no_grad():
             pi, v = self.nnet(board)
@@ -85,7 +87,8 @@ class Model():
         return -torch.sum(targets * outputs) / targets.shape[0]
 
     def loss_v(self, targets, outputs):
-        return torch.sum((targets - outputs.view(-1)) ** 2) / targets.shape[0]
+        return self.mse_loss(outputs.view(-1), targets)
+
 
     def save_checkpoint(self, folder='checkpoint', filename='checkpoint.pth.tar'):
         filepath = os.path.join(folder, filename)

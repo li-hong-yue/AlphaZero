@@ -3,8 +3,6 @@ import math
 import numpy as np
 from collections import defaultdict
 
-
-
 log = logging.getLogger(__name__)
 
 
@@ -52,7 +50,7 @@ class MCTS:
         """
         This function performs one iteration of MCTS. It is recursively called
         till a leaf node is found. The action chosen at each node is one that
-        has the maximum upper confidence bound as in the paper.
+        has the maximum upper confidence bound.
 
         Once a leaf node is found, the neural network is called to return an
         initial policy P and a value v for the state. This value is propagated

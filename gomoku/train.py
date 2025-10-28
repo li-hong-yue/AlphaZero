@@ -62,7 +62,7 @@ def main():
 
     log.info('Loading the Coach...')
     coach = Coach(game, model, args['self-play'])
-
+ 
     if args['load_model']:
         log.info("Loading 'trainExamples' from file...")
         coach.loadTrainExamples()
