@@ -1,10 +1,8 @@
 import numpy as np
-import sys
 
-sys.path.append('..')
 
 from algorithms.game import Game
-from .board import Board
+from othello.board import Board
 
  
 class OthelloGame(Game):
