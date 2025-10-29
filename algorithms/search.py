@@ -80,7 +80,6 @@ class MCTS:
             self.Valids[s] = self.game.getValidMoves(canonicalBoard, 1)
             self.Ps[s] = (self.Ps[s] + 1e-4) * self.Valids[s]  # smoothing + masking invalid moves
             self.Ps[s] /= np.sum(self.Ps[s])  # normalize
-            self.Ns[s] = 0
             return -v
 
 
